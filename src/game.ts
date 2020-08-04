@@ -33,24 +33,63 @@ export default class Demo extends Phaser.Scene {
         this.layer.setCollisionByExclusion([7]);
         this.physics.add.collider(this.layer, this.mario);
 
-        this.mario.setMaxVelocity(200,500);
+        this.mario.setMaxVelocity(150,500);
 
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 		this.cameras.main.startFollow(this.mario, false);
     }
+
+
+    spaceCount = 0;
     update() {
+        const DER = 50;
+        const INERTIA = 15;
         if (this.cursors.left.isDown) {
-            this.mario.setAccelerationX(-100);
+
+            if (this.mario.body.onFloor()) {
+                // derapage
+                if (this.mario.body.velocity.x > DER){
+                    this.mario.setVelocityX(DER);
+                }
+                this.mario.setAccelerationX(-100);
+            } else {
+                this.mario.setAccelerationX(-100);
+            }
         }
         else if (this.cursors.right.isDown) {
-            this.mario.setAccelerationX(100);
+            if (this.mario.body.onFloor()) {
+                // derapage
+                if (this.mario.body.velocity.x < -DER){
+                    this.mario.setVelocityX(-DER);
+                }
+                this.mario.setAccelerationX(100);
+            } else {
+                this.mario.setAccelerationX(100);
+            }
         } else {
-            this.mario.setAccelerationX(0);
-            const right = this.mario.body.velocity.x > 10 ? this.mario.body.velocity.x - 5 : 0;
-            const left = this.mario.body.velocity.x < -10 ? this.mario.body.velocity.x + 5 : 0;
-            if (right != 0)this.mario.setVelocityX(right);
-            else if (left != 0) this.mario.setVelocityX(left);
-            else this.mario.setVelocityX(left);
+            if (this.mario.body.onFloor()) {
+                this.mario.setAccelerationX(0);
+                const right = this.mario.body.velocity.x > INERTIA ? this.mario.body.velocity.x - 13 : 0;
+                const left = this.mario.body.velocity.x < -INERTIA ? this.mario.body.velocity.x + 13 : 0;
+                if (right != 0)this.mario.setVelocityX(right);
+                else if (left != 0) this.mario.setVelocityX(left);
+                else this.mario.setVelocityX(left);
+            }
+        }
+
+        if (this.cursors.space.isDown) {
+            this.spaceCount += 1;
+            this.mario.setAccelerationY(-1500);
+            if (this.spaceCount > 11) {
+                this.mario.setAccelerationY(0);
+            }
+            //setTimeout(() => this.mario.setAccelerationY(0), 200);
+        } else {
+            this.mario.setAccelerationY(0);
+        }
+        if (this.mario.body.onFloor()) {
+            this.spaceCount = 0;
+            this.mario.setVelocityY(0);
         }
     }
 }

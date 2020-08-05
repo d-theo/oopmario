@@ -119,8 +119,6 @@ export default class Demo extends Phaser.Scene {
             lifespan: 4000,
             speed: 300,
             angle: {
-                //min: -90 - 25,
-                //max: -45 - 25
                 min: -105,
                 max: -70
             },

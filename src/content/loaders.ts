@@ -14,13 +14,13 @@ export class StageLoader {
                 {kind:'brick',x: 22, y: 5},
                 {kind:'brick',x: 24, y: 0},
             ],
-            ground: new Array(40).fill(0).map(((x,i) => {
+            ground: new Array(60).fill(0).map(((x,i) => {
                 return {
                     x:i,
                     y:0
                 }
                 })).concat(
-                new Array(40).fill(0).map(((x,i) => {
+                new Array(60).fill(0).map(((x,i) => {
                     return {
                         x:i,
                         y:1

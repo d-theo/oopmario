@@ -56,7 +56,7 @@ export default class Demo extends Phaser.Scene {
         this.mario.body.setSize(10,16);
         this.mario.setBounce(0.2);
         this.mario.setGravityY(475);
-        this.mario.setCollideWorldBounds(true);
+        //this.mario.setCollideWorldBounds(true);
         this.physics.add.collider(ground, this.mario, () => this.isOnFloor = true);
         this.physics.add.collider(chance, this.mario, (_mario: Phaser.Physics.Arcade.Sprite, _chance: Phaser.Physics.Arcade.Sprite) => {
             if (_chance.body.touching.down && _mario.body.touching.up) {            
@@ -103,7 +103,7 @@ export default class Demo extends Phaser.Scene {
 
         this.mario.setMaxVelocity(150,500);
 
-        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+        this.cameras.main.setBounds(0, 0, 60*16, map.heightInPixels);
 		this.cameras.main.startFollow(
             this.mario,
             true,
@@ -132,6 +132,8 @@ export default class Demo extends Phaser.Scene {
             frameRate: 10,
             repeat: -1
         });
+        this.game.scale.setZoom(2)
+
     }
     isOnFloor = false;
     canJump = true;
@@ -212,6 +214,10 @@ const config = {
     width: 400,
     height: 17*16,
     scene: Demo,
+    /*scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+    },*/
     physics: {
         default: 'arcade',
         debug: true,

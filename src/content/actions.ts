@@ -6,14 +6,7 @@ export class JumpAction extends Action {
         super();
     }
     perform(): ActionResult {
-        if (this.entity.currentMovement === 'jumping') {
-            return fail();
-        } else {
-            setTimeout(() => this.entity.currentMovement = 'still', 1000);
-            this.entity.velocityY = -1200;
-            this.entity.currentMovement = 'jumping'
-            return ok();
-        }
+        return ok();
     }
 }
 export class MoveAction extends Action {
@@ -21,10 +14,7 @@ export class MoveAction extends Action {
         super();
     }
     perform(): ActionResult {
-        this.entity.velocityX += 4;
-        if (this.entity.velocityX > 130) {
-            this.entity.velocityX = 130;
-        }
+
         return ok();
     }
 }
@@ -33,18 +23,6 @@ export class RestAction extends Action {
         super();
     }
     perform(): ActionResult {
-        if (this.entity.velocityX > 10) {
-            this.entity.velocityX -= 2;
-        } else if (this.entity.velocityX < -10) {
-            this.entity.velocityX += 2;
-        } else {
-            this.entity.velocityX = 0;
-        }
-        if (this.entity.velocityY < 0) {
-            this.entity.velocityY += 50;
-        } else {
-            this.entity.velocityY = 0;
-        }
         return ok();
     }
 }

@@ -8,7 +8,7 @@ export class Stage {
     private _tiles: Tiles[];
     private _items: Item[];
     private _monsters: Entity[];
-    public tilemap: number[][];
+    public tilemap: any;
     public mario: Mario;
     constructor(private loader: IStageLoader, private level: string) {
         loader.build(this.level);

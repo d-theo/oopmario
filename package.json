@@ -1,7 +1,7 @@
 {
     "name": "phaser3-typescript-project-template",
-    "version": "1.0.4",
-    "description": "A Phaser 3 Project Template using Rollup and TypeScript",
+    "version": "1.0.5",
+    "description": "A mario like in phaser3",
     "main": "src/game.ts",
     "scripts": {
         "dev": "rollup --config rollup.config.dev.js",

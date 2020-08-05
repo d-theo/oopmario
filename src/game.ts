@@ -41,6 +41,7 @@ export default class Demo extends Phaser.Scene {
         for (let t of map.chance) {
             const pos = toPix(t);
             const sp:any = this.physics.add.sprite(pos.x, pos.y, 'chance');
+            sp.setBounce(0.3);
             chance.add(sp);
         }
         const ground = this.physics.add.group({immovable: true});
@@ -54,12 +55,10 @@ export default class Demo extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
         this.mario = this.physics.add.sprite(100, 100, 'mario');
         this.mario.body.setSize(10,16);
-        this.mario.setBounce(0.2);
-        this.mario.setGravityY(475);
-        //this.mario.setCollideWorldBounds(true);
+        this.mario.setGravityY(400);
         this.physics.add.collider(ground, this.mario, () => this.isOnFloor = true);
         this.physics.add.collider(chance, this.mario, (_mario: Phaser.Physics.Arcade.Sprite, _chance: Phaser.Physics.Arcade.Sprite) => {
-            if (_chance.body.touching.down && _mario.body.touching.up) {            
+            if (_chance.body.touching.down && _mario.body.touching.up) {
                 this.add.tween({
                     targets: _chance,
                     duration: 150,
@@ -71,9 +70,9 @@ export default class Demo extends Phaser.Scene {
                         _chance.setTexture('chance-used');
                         if (oldTex.key !== 'chance-used') {
                             const bonus = this.physics.add.sprite(_chance.x, _chance.y-16, 'mushroom');
-                            bonus.setAccelerationX(100);
-                            bonus.setGravityY(1500);
-                            bonus.setMaxVelocity(130);
+                            bonus.setAccelerationX(50);
+                            bonus.setGravityY(1000);
+                            bonus.setMaxVelocity(60, 500);
                             this.physics.add.collider(ground, bonus);
                             this.physics.add.collider(chance, bonus);
                             this.physics.add.collider(bricks, bonus);
@@ -84,6 +83,29 @@ export default class Demo extends Phaser.Scene {
                     }
                 });
             }
+        }, (_mario: Phaser.Physics.Arcade.Sprite, _chance: Phaser.Physics.Arcade.Sprite) => {
+            const d = Math.abs(_chance.body.x - (_mario.body.x+10));
+            if (d <= 3 && _mario.body.y >= _chance.body.y) {
+                this.add.tween({
+                    targets: _mario,
+                    duration: 10,
+                    ease: "linear",
+                    x: '-='+d,
+                });
+                return false;
+            }
+
+            const pd = Math.abs(_chance.body.x+16 - (_mario.body.x));
+            if (pd <= 3 && _mario.body.y >= _chance.body.y) {
+                this.add.tween({
+                    targets: _mario,
+                    duration: 10,
+                    ease: "linear",
+                    x: '+='+pd,
+                });
+                return false;
+            }
+            return true;
         });
         this.physics.add.collider(bricks, this.mario, (_mario:any,_brick:any) => {
             if (_brick.body.touching.down && _mario.body.touching.up) {
@@ -101,7 +123,7 @@ export default class Demo extends Phaser.Scene {
 
         this.add.text(10,10,''+this.game.loop.actualFps);
 
-        this.mario.setMaxVelocity(150,500);
+        this.mario.setMaxVelocity(100,350);
 
         this.cameras.main.setBounds(0, 0, 60*16, map.heightInPixels);
 		this.cameras.main.startFollow(
@@ -191,11 +213,11 @@ export default class Demo extends Phaser.Scene {
         }
 
         if (this.cursors.space.isDown && this.canJump) {
-            this.mario.setAccelerationY(-1500);
-            setTimeout(() => {
+            this.mario.setAccelerationY(-2200);
+            this.time.delayedCall(130, () => {
                 this.mario.setAccelerationY(0)
                 this.canJump = false;
-            }, 200);
+            });
         } else {
             this.mario.setAccelerationY(0);
         }
@@ -212,14 +234,19 @@ const config = {
     width: 400,
     height: 17*16,
     scene: Demo,
-    /*scale: {
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH,
-    },*/
     physics: {
         default: 'arcade',
         debug: true,
         gravity: { y: 475 },
+        /*arcade: {
+            debug: true,
+            debugShowBody: true,
+            debugShowStaticBody: true,
+            debugShowVelocity: true,
+            debugVelocityColor: 0xffff00,
+            debugBodyColor: 0x0000ff,
+            debugStaticBodyColor: 0xffffff
+        }*/
     }
 };
 

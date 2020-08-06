@@ -1,38 +1,43 @@
+import { EntityType } from "./entities";
+
 export class StageLoader {
     build(level: string) {
     }
-    getTiles(): any {
-        return {
-            chance: [
-                {kind:'chance',x: 16, y: 5},
-                {kind:'chance',x: 21, y: 5},
-                {kind:'chance',x: 22, y: 9},
-                {kind:'chance',x: 23, y: 5},
-            ],
-            brick: [
-                {kind:'brick',x: 20, y: 5},
-                {kind:'brick',x: 22, y: 5},
-                {kind:'brick',x: 24, y: 0},
-            ],
-            ground: new Array(60).fill(0).map(((x,i) => {
+    getTiles(): {kind: EntityType, x: number, y: number}[] {
+        const ground = new Array(60).fill(0).map(((x,i) => {
+            return {
+                kind: 'ground' as EntityType,
+                x:i,
+                y:0
+            }
+            })).concat(
+            new Array(60).fill(0).map(((x,i) => {
                 return {
+                    kind: 'ground',
                     x:i,
-                    y:0
+                    y:1
                 }
-                })).concat(
-                new Array(60).fill(0).map(((x,i) => {
-                    return {
-                        x:i,
-                        y:1
-                    }
-                }
-                ))
-           )
-        }
+            }
+            ))
+       );
+        return [
+            {kind:'chance' as EntityType,x: 16, y: 5},
+            {kind:'chance' as EntityType,x: 21, y: 5},
+            {kind:'chance' as EntityType,x: 22, y: 9},
+            {kind:'chance' as EntityType,x: 23, y: 5},
+
+            {kind:'brick' as EntityType,x: 20, y: 5},
+            {kind:'brick' as EntityType,x: 22, y: 5},
+            {kind:'brick' as EntityType,x: 24, y: 0},
+        ].concat(ground);
+    }
+    
+    getHero(): {kind: EntityType, x: number, y: number} {
+        return {kind: 'mario' as EntityType, x: 10, y: 10};
     }
     getMonsters() {
         return [
-            {2: 36, y: 2, kind: 'mushroom'}
+            //{2: 36, y: 2, kind: 'mushroom'}
         ];
     }
     getItems() {

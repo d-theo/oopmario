@@ -1,9 +1,8 @@
-import { ODMEvent } from "./events";
-import { OneDayMario } from "../OneDayMario";
+import { OneDayMario } from "./OneDayMario";
 
 export abstract class Action {
     private static _game: OneDayMario;
-    protected game: OneDayMario;
+    protected game: OneDayMario; // todo : private and just have some public methods
     constructor() {
         this.game = Action._game;
     }
@@ -11,11 +10,5 @@ export abstract class Action {
         Action._game = game;
     }
 
-    abstract perform(): ActionResult;
-}
-
-export type ActionResult = {
-    status: 'ok' | 'fail';
-    actions: Action[];
-    events: ODMEvent[];
+    abstract perform();
 }

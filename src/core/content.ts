@@ -1,5 +1,6 @@
 import {Stage} from './stage';
 import { ILoaderFactory } from './loader';
+import { EntityFactory } from '../content/entities';
 
 export class Content {
     points: number = 0;
@@ -7,12 +8,18 @@ export class Content {
     lifes: number = 3;
     stage: Stage;
     loaderFactory: ILoaderFactory;
-    constructor(loaderFactory: ILoaderFactory) {
+    constructor(loaderFactory: ILoaderFactory, private readonly entityFactory: EntityFactory) {
         this.loaderFactory = loaderFactory;
-        this.level = '1-1';
-        this.build();
     }
-    build() {
-        this.stage = new Stage(this.loaderFactory.fromFile(), this.level);
+    setLevel(level: string) {
+        this.level = level;
+    }
+    buildStage() {
+        this.stage = new Stage(
+            this.loaderFactory.fromFile(),
+            this.level,
+            this.entityFactory
+        );
+        this.stage.build();
     }
 }

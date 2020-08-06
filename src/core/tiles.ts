@@ -1,10 +1,15 @@
-import { IEventsFactory, ODMEvent } from "./events";
+import { Entity } from "./entity";
 
-export abstract class Tiles {
+export abstract class Tiles extends Entity {
     type: string;
-    protected eventFactory: IEventsFactory;
-    abstract onEnter(): ODMEvent;
-    abstract onHit(): ODMEvent;
-    abstract isWalkable(): boolean;
-    abstract isBreakable(): boolean;
+    abstract visits(visitor: TileVisitor);
+    kill() {
+        this.sprite.destroy();
+    }
+}
+
+export interface TileVisitor {
+    visitBrick(visitor: Tiles);
+    visitGround(visitor: Tiles);
+    visitChance(visitor: Tiles);
 }

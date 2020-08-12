@@ -32,6 +32,8 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('chance-used', '/assets/chance-used.png');
         this.load.image('mushroom', '/assets/mushroom.png');
         this.load.spritesheet('mario-run', '/assets/mario.png', { frameWidth: 16, frameHeight: 16 });
+
+        
     }
     create () {
         this.effects = new GameEffects(this);
